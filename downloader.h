@@ -25,6 +25,7 @@ class Downloader : public QObject
 public:
     explicit Downloader(QObject *parent = nullptr);
 
+    void setInstallDirectory(const QString &value) { installDir_ = value; }
     void download(const QString &id);
 
 signals:
@@ -36,4 +37,5 @@ private:
 
 private:
     QNetworkAccessManager *net_;
+    QString installDir_;
 };

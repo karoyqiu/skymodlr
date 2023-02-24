@@ -19,6 +19,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::MainWindow)
+    , downloader_(nullptr)
 {
     ui->setupUi(this);
     loadSettings();
@@ -29,9 +30,9 @@ MainWindow::MainWindow(QWidget *parent)
     profile->settings()->setAttribute(QWebEngineSettings::WebRTCPublicInterfacesOnly, true);
 
     // Register download scheme
-    auto *downloader = new Downloader(this);
+    downloader_ = new Downloader(this);
     auto *dl = new DownloadSchemeHandler(this);
-    connect(dl, &DownloadSchemeHandler::downloadRequested, downloader, &Downloader::download);
+    connect(dl, &DownloadSchemeHandler::downloadRequested, downloader_, &Downloader::download);
     profile->installUrlSchemeHandler(QB("dl"), dl);
 
     // Load user script
@@ -57,6 +58,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Load Skylines mods page
     ui->webView->load(QS("https://steamcommunity.com/workshop/browse/?appid=255710&requiredtags[]=Mod"));
+
+    // Find out where Skylines is.
+    QTimer::singleShot(0, this, &MainWindow::detectSkylines);
 }
 
 
@@ -116,4 +120,37 @@ void MainWindow::saveSettings() const
 {
     QSettings settings;
     settings.setValue(QS("geo"), saveGeometry());
+}
+
+
+void MainWindow::detectSkylines()
+{
+    QSettings reg(QS(R"(HKEY_CURRENT_USER\Software\Epic Games\EOS)"), QSettings::NativeFormat);
+    auto metaDir = reg.value(QS("ModSdkMetadataDir")).toString();
+
+    if (!metaDir.isEmpty())
+    {
+        QDir dir(metaDir);
+
+        for (const auto &entry : dir.entryList({ QS("*.item") }))
+        {
+            QFile file(dir.absoluteFilePath(entry));
+
+            if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+            {
+                auto doc = QJsonDocument::fromJson(file.readAll());
+                auto appName = doc[QL("MainGameAppName")].toString();
+
+                if (appName == QS("bcbc03d8812a44c18f41cf7d5f849265"))
+                {
+                    auto location = doc[QL("InstallLocation")].toString();
+                    qInfo() << "Skylines install location:" << location;
+                    downloader_->setInstallDirectory(location);
+                    return;
+                }
+            }
+        }
+    }
+
+    QMessageBox::warning(this, {}, tr("Failed to find Skylines."));
 }

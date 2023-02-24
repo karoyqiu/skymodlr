@@ -13,6 +13,8 @@
 #pragma once
 #include <QWidget>
 
+class Downloader;
+
 namespace Ui {
 class MainWindow;
 }
@@ -34,6 +36,9 @@ private:
     void loadSettings();
     void saveSettings() const;
 
+    void detectSkylines();
+
 private:
     Ui::MainWindow *ui;
+    Downloader *downloader_;
 };
