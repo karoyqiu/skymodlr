@@ -115,6 +115,12 @@ int main(int argc, char *argv[])
     checkDarkMode(a);
     //QIcon::setThemeName(QS("elementary"));
 
+    // Register a custom scheme
+    QWebEngineUrlScheme scheme(QB("dl"));
+    scheme.setSyntax(QWebEngineUrlScheme::Syntax::Path);
+    scheme.setFlags(QWebEngineUrlScheme::SecureScheme);
+    QWebEngineUrlScheme::registerScheme(scheme);
+
     MainWindow w;
     w.show();
 

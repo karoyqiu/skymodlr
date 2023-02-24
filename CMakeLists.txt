@@ -51,6 +51,7 @@ set(TS_FILES skymodlr_zh_CN.ts)
 set(PROJECT_SOURCES
     main.cpp
     mainwindow.cpp mainwindow.h mainwindow.ui
+    downloadschemehandler.cpp downloadschemehandler.h
     #"${CMAKE_CURRENT_BINARY_DIR}/resource.rc"
     resources.qrc
     ${TS_FILES}

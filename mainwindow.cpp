@@ -12,6 +12,7 @@
  **************************************************************************************************/
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "downloadschemehandler.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -21,24 +22,35 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     loadSettings();
 
-    // Load Skylines mods page
+    // Create an off-the-record profile
     auto *profile = new QWebEngineProfile(this);
 
-    QFile userJs(QS(":/scripts/steamwd.user.js"));
+    // Register download scheme
+    auto *dl = new DownloadSchemeHandler(this);
+    profile->installUrlSchemeHandler(QB("dl"), dl);
 
-    if (userJs.open(QIODevice::ReadOnly | QIODevice::Text))
+    // Load user script
+    QFile file(QS(":/scripts/steamwd.user.js"));
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
+        auto js = QSS(file.readAll());
+        js.replace(QS("{{tip}}"), tr("Download/Subscribe to the right"))
+            .replace(QS("{{download}}"), tr("Download"));
+
         QWebEngineScript script;
-        script.setSourceCode(QSS(userJs.readAll()));
+        script.setSourceCode(js);
         profile->scripts()->insert(script);
     }
     else
     {
-        qCritical() << "Failed to open user script:" << userJs.errorString();
+        qCritical() << "Failed to open user script:" << file.errorString();
     }
 
     auto *page = new QWebEnginePage(profile, ui->webView);
     ui->webView->setPage(page);
+
+    // Load Skylines mods page
     ui->webView->load(QS("https://steamcommunity.com/workshop/browse/?appid=255710&requiredtags[]=Mod"));
 }
 
