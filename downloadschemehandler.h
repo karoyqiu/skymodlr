@@ -22,4 +22,7 @@ public:
     using QWebEngineUrlSchemeHandler::QWebEngineUrlSchemeHandler;
 
     virtual void requestStarted(QWebEngineUrlRequestJob *job) override;
+
+signals:
+    void downloadRequested(const QString &id);
 };

@@ -12,6 +12,7 @@
  **************************************************************************************************/
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "downloader.h"
 #include "downloadschemehandler.h"
 
 
@@ -22,11 +23,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     loadSettings();
 
-    // Create an off-the-record profile
-    auto *profile = new QWebEngineProfile(this);
+    // Get the default profile
+    auto *profile = QWebEngineProfile::defaultProfile();
+    profile->setHttpUserAgent(USER_AGENT);
+    profile->settings()->setAttribute(QWebEngineSettings::WebRTCPublicInterfacesOnly, true);
 
     // Register download scheme
+    auto *downloader = new Downloader(this);
     auto *dl = new DownloadSchemeHandler(this);
+    connect(dl, &DownloadSchemeHandler::downloadRequested, downloader, &Downloader::download);
     profile->installUrlSchemeHandler(QB("dl"), dl);
 
     // Load user script

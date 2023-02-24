@@ -15,6 +15,8 @@
 
 void DownloadSchemeHandler::requestStarted(QWebEngineUrlRequestJob *job)
 {
-    qDebug() << "Download" << job->requestUrl() << job->requestUrl().path();
+    auto id = job->requestUrl().path();
     job->fail(QWebEngineUrlRequestJob::RequestAborted);
+
+    emit downloadRequested(id);
 }
