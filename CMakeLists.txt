@@ -43,6 +43,7 @@ set(QT_LIBS
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS ${QT_LIBS} LinguistTools REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS ${QT_LIBS} LinguistTools REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR}Gui COMPONENTS Private REQUIRED)
 
 #configure_file(resource.rc.in resource.rc @ONLY)
 
@@ -91,6 +92,7 @@ foreach(L ${QT_LIBS})
     target_link_libraries(skymodlr PRIVATE Qt${QT_VERSION_MAJOR}::${L})
 endforeach()
 
+target_link_libraries(skymodlr PRIVATE Qt${QT_VERSION_MAJOR}::GuiPrivate)
 target_precompile_headers(skymodlr PRIVATE "<QtWebEngineWidgets>" "stable.h")
 
 if(WIN32)

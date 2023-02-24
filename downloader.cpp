@@ -12,19 +12,22 @@
  **************************************************************************************************/
 #include "downloader.h"
 
+#include <QtGui/private/qzipreader_p.h>
+
 
 Downloader::Downloader(QObject *parent /*= nullptr*/)
     : QObject(parent)
     , net_(nullptr)
 {
     net_ = new QNetworkAccessManager(this);
+    net_->setProxy(QNetworkProxy::NoProxy);
+}
 
-    QNetworkProxy proxy;
-    proxy.setType(QNetworkProxy::HttpProxy);
-    proxy.setHostName(QS("127.0.0.1"));
-    proxy.setPort(8888);
-    net_->setProxy(proxy);
-    //net_->setProxy(QNetworkProxy::NoProxy);
+
+void Downloader::setInstallDirectory(const QString &value)
+{
+    QDir dir(value);
+    modDir_ = dir.absoluteFilePath(QS("Files/Mods"));
 }
 
 
@@ -63,12 +66,56 @@ void Downloader::handleReply()
             start += prefix.length();
             auto end = s.indexOf(QL('\''), start);
             auto url = s.mid(start, end - start);
-            qDebug() << "URL" << url;
+            downloadZip(url);
         }
     }
     else
     {
         qCritical() << "Failed to get download url." << status;
+    }
+
+    reply->deleteLater();
+}
+
+
+void Downloader::downloadZip(const QUrl &url)
+{
+    qDebug() << "Zip" << url;
+    QNetworkRequest req(url);
+    req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
+    req.setHeader(QNetworkRequest::UserAgentHeader, USER_AGENT);
+    auto *reply = net_->get(req);
+    connect(reply, &QNetworkReply::finished, this, &Downloader::handleZip);
+}
+
+
+void Downloader::handleZip()
+{
+    auto *reply = qobject_cast<QNetworkReply *>(sender());
+    auto status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+    if (status == 200)
+    {
+        QBuffer buffer;
+        buffer.setData(reply->readAll());
+        buffer.open(QIODevice::ReadOnly);
+
+        QZipReader zip(&buffer);
+        auto ok = zip.extractAll(modDir_);
+
+        if (ok)
+        {
+            emit downloaded();
+        }
+        else
+        {
+            qCritical() << "Failed to unzip.";
+            emit failed();
+        }
+    }
+    else
+    {
+        qCritical() << "Failed to download zip." << status;
     }
 
     reply->deleteLater();
