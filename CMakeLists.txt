@@ -52,6 +52,7 @@ set(PROJECT_SOURCES
     main.cpp
     mainwindow.cpp mainwindow.h mainwindow.ui
     #"${CMAKE_CURRENT_BINARY_DIR}/resource.rc"
+    resources.qrc
     ${TS_FILES}
 )
 

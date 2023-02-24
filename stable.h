@@ -16,6 +16,7 @@
 
 #define QB(x)   QByteArrayLiteral(x)
 #define QS(x)   QStringLiteral(x)
+#define QSS(x)  QString::fromUtf8(x)
 
 
 inline QLatin1String QL(const char *s)

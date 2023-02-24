@@ -22,6 +22,23 @@ MainWindow::MainWindow(QWidget *parent)
     loadSettings();
 
     // Load Skylines mods page
+    auto *profile = new QWebEngineProfile(this);
+
+    QFile userJs(QS(":/scripts/steamwd.user.js"));
+
+    if (userJs.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QWebEngineScript script;
+        script.setSourceCode(QSS(userJs.readAll()));
+        profile->scripts()->insert(script);
+    }
+    else
+    {
+        qCritical() << "Failed to open user script:" << userJs.errorString();
+    }
+
+    auto *page = new QWebEnginePage(profile, ui->webView);
+    ui->webView->setPage(page);
     ui->webView->load(QS("https://steamcommunity.com/workshop/browse/?appid=255710&requiredtags[]=Mod"));
 }
 
