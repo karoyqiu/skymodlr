@@ -7,14 +7,14 @@
 // @downloadURL    http://st.abcvg.info/swd/steamwd.user.js
 // ==/UserScript==
 
-const id = /[0-9]{2,15}/.exec(document.URL);
+const id = /[0-9]{2,15}/.exec(document.URL)[0];
 
 const realButton = document.getElementById('SubscribeItemBtn');
 
 const button = document.createElement('a');
 button.setAttribute('id', realButton.id);
 button.setAttribute('class', realButton.className);
-button.setAttribute('href', `dl:${id}`);
+//button.setAttribute('href', `dl:${id}`);
 
 const updateButtonText = (text) => {
     button.innerHTML = '<div class="subscribeIcon"></div>' +
@@ -37,6 +37,8 @@ new QWebChannel(qt.webChannelTransport, (channel) => {
     console.log('Web channel connected!', id);
     window.dl = channel.objects.dl;
     
+    button.onclick = () => { dl.download(id); }
+    dl.resetButtonText();
     updateButtonText(dl.buttonText);
     dl.buttonTextChanged.connect(updateButtonText);
 });

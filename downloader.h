@@ -21,15 +21,17 @@ class QNetworkAccessManager;
 class Downloader : public QObject
 {
     Q_OBJECT
-        Q_PROPERTY(QString buttonText READ buttonText NOTIFY buttonTextChanged)
+        Q_PROPERTY(QString buttonText READ buttonText RESET resetButtonText NOTIFY buttonTextChanged)
 
 public:
     explicit Downloader(QObject *parent = nullptr);
 
+    QString buttonText() const { return buttonText_; }
+
+public slots:
     void setInstallDirectory(const QString &value);
     void download(const QString &id);
-
-    QString buttonText() const { return buttonText_; }
+    void resetButtonText() { setButtonText(tr("Download")); }
 
 signals:
     void downloaded();

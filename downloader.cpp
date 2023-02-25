@@ -18,11 +18,11 @@
 Downloader::Downloader(QObject *parent /*= nullptr*/)
     : QObject(parent)
     , net_(nullptr)
-    , buttonText_(tr("Download"))
 {
     net_ = new QNetworkAccessManager(this);
     net_->setProxy(QNetworkProxy::NoProxy);
 
+    resetButtonText();
     connect(this, &Downloader::failed, this, [this]()
     {
         setButtonText(tr("Failed"));
@@ -42,14 +42,18 @@ void Downloader::download(const QString &id)
     qDebug() << "Downloading" << id;
     setButtonText(tr("Downloading..."));
 
-    QUrlQuery query;
-    query.addQueryItem(QS("item"), id);
-    query.addQueryItem(QS("app"), QS("255710"));
-    auto body = query.toString(QUrl::FullyEncoded).toUtf8();
-
-    QNetworkRequest req(QS("http://steamworkshop.download/online/steamonline.php"));
-    req.setHeader(QNetworkRequest::ContentTypeHeader, QB("application/x-www-form-urlencoded"));
+    QNetworkRequest req(QS("https://api.ggntw.com/steam.request"));
+    req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, QB("application/json"));
     req.setHeader(QNetworkRequest::UserAgentHeader, USER_AGENT);
+    req.setRawHeader(QB("Origin"), QB("https://ggntw.com"));
+    req.setRawHeader(QB("Referer"), QB("https://ggntw.com/"));
+
+    QJsonObject obj{
+        { QS("url"), QString(QS("https://steamcommunity.com/sharedfiles/filedetails/?id=") % id) }
+    };
+    QJsonDocument doc(obj);
+    auto body = doc.toJson(QJsonDocument::Compact);
 
     auto *reply = net_->post(req, body);
     connect(reply, &QNetworkReply::finished, this, &Downloader::handleReply);
@@ -73,26 +77,23 @@ void Downloader::handleReply()
 
     if (status == 200)
     {
-        static const QString prefix = QS("href='");
-        auto s = QSS(reply->readAll());
-        auto start = s.indexOf(prefix);
+        auto body = reply->readAll();
+        auto doc = QJsonDocument::fromJson(body);
+        auto url = doc[QL("url")].toString();
 
-        if (start == -1)
+        if (url.isEmpty())
         {
-            qCritical() << "Failed to get the download url." << s;
-            emit failed(tr("Failed to get download url (%1).").arg(s));
+            qCritical() << "Failed to get the download url." << url;
+            emit failed(tr("Failed to get download url (%1).").arg(url));
         }
         else
         {
-            start += prefix.length();
-            auto end = s.indexOf(QL('\''), start);
-            auto url = s.mid(start, end - start);
             downloadZip(url);
         }
     }
     else
     {
-        qCritical() << "Failed to get download url." << status;
+        qCritical() << "Failed to get download url." << status << reply->errorString();
         emit failed(tr("Failed to get download url (%1).").arg(status));
     }
 

@@ -4,33 +4,38 @@
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="downloader.cpp" line="21"/>
+        <location filename="downloader.h" line="34"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="38"/>
+        <location filename="downloader.cpp" line="28"/>
+        <source>Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="downloader.cpp" line="43"/>
         <source>Downloading...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="78"/>
-        <location filename="downloader.cpp" line="91"/>
+        <location filename="downloader.cpp" line="87"/>
+        <location filename="downloader.cpp" line="97"/>
         <source>Failed to get download url (%1).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="127"/>
+        <location filename="downloader.cpp" line="133"/>
         <source>Installed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="132"/>
+        <location filename="downloader.cpp" line="138"/>
         <source>Failed to unzip.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="138"/>
+        <location filename="downloader.cpp" line="144"/>
         <source>Failed to download zip (%1).</source>
         <translation type="unfinished"></translation>
     </message>
