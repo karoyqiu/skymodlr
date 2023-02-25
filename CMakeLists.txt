@@ -38,6 +38,7 @@ if(COMMAND check_ipo_supported)
 endif()
 
 set(QT_LIBS
+    WebChannel
     WebEngineWidgets
 )
 
@@ -88,12 +89,12 @@ target_compile_definitions(skymodlr
 )
 
 foreach(L ${QT_LIBS})
-    target_precompile_headers(skymodlr PRIVATE <Qt${L}>)
     target_link_libraries(skymodlr PRIVATE Qt${QT_VERSION_MAJOR}::${L})
+    target_precompile_headers(skymodlr PRIVATE "<Qt${L}>")
 endforeach()
 
 target_link_libraries(skymodlr PRIVATE Qt${QT_VERSION_MAJOR}::GuiPrivate)
-target_precompile_headers(skymodlr PRIVATE "<QtWebEngineWidgets>" "stable.h")
+target_precompile_headers(skymodlr PRIVATE "stable.h")
 
 if(WIN32)
     find_library(WinRT windowsapp)

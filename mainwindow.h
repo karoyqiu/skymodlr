@@ -33,6 +33,13 @@ protected:
     virtual void closeEvent(QCloseEvent *e) override;
 
 private:
+    static void loadScript(
+        QWebEngineProfile *profile,
+        const QString &filename,
+        QWebEngineScript::InjectionPoint ip = QWebEngineScript::Deferred
+    );
+
+private:
     void loadSettings();
     void saveSettings() const;
 

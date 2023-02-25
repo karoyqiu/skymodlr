@@ -41,24 +41,12 @@ MainWindow::MainWindow(QWidget *parent)
     profile->installUrlSchemeHandler(QB("dl"), dl);
 
     // Load user script
-    QFile file(QS(":/scripts/steamwd.user.js"));
-
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        auto js = QSS(file.readAll());
-        js.replace(QS("{{tip}}"), tr("Download/Subscribe to the right"))
-            .replace(QS("{{download}}"), tr("Download"));
-
-        QWebEngineScript script;
-        script.setSourceCode(js);
-        profile->scripts()->insert(script);
-    }
-    else
-    {
-        qCritical() << "Failed to open user script:" << file.errorString();
-    }
+    loadScript(profile, QS(":/qtwebchannel/qwebchannel.js"), QWebEngineScript::DocumentCreation);
+    loadScript(profile, QS(":/scripts/steamwd.user.js"));
 
     auto *page = new QWebEnginePage(profile, ui->webView);
+    auto *channel = new QWebChannel(this);
+    page->setWebChannel(channel, QWebEngineScript::ApplicationWorld);
     ui->webView->setPage(page);
 
     // Load Skylines mods page
@@ -94,6 +82,28 @@ void MainWindow::closeEvent(QCloseEvent *e)
 {
     saveSettings();
     QWidget::closeEvent(e);
+}
+
+
+void MainWindow::loadScript(QWebEngineProfile *profile, const QString &filename, QWebEngineScript::InjectionPoint ip)
+{
+    QFile file(filename);
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        auto js = QSS(file.readAll());
+        js.replace(QS("{{tip}}"), tr("Download/Subscribe to the right"))
+            .replace(QS("{{download}}"), tr("Download"));
+
+        QWebEngineScript script;
+        script.setSourceCode(js);
+        script.setInjectionPoint(ip);
+        profile->scripts()->insert(script);
+    }
+    else
+    {
+        qCritical() << "Failed to open user script:" << filename << file.errorString();
+    }
 }
 
 

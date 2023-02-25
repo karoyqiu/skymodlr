@@ -7,32 +7,27 @@
 // @downloadURL    http://st.abcvg.info/swd/steamwd.user.js
 // ==/UserScript==
 
-var id = /[0-9]{2,15}/.exec(document.URL);
+const id = /[0-9]{2,15}/.exec(document.URL);
 
-var realButton = document.getElementById('SubscribeItemBtn');
+// WebChannel
+new QWebChannel(qt.webChannelTransport, (channel) => {
+    console.log('Web channel connected!', id);
+});
 
-// shorten the text in the box because it will be in the way
-realButton.parentNode.parentNode.getElementsByTagName("h1")[0].childNodes[0].innerHTML = '{{tip}}';
+const realButton = document.getElementById('SubscribeItemBtn');
 
-var myButtonPosition = realButton.offsetWidth + 20;
-
-var button = document.createElement('a');
+const button = document.createElement('a');
 button.setAttribute('id', realButton.id);
 button.setAttribute('class', realButton.className);
 button.setAttribute('href', `dl:${id}`);
-//button.setAttribute('style', 'right: ' + myButtonPosition + 'px;');
-
 button.innerHTML = '<div class="subscribeIcon"></div>' +
     '<span class="subscribeText">' +
     '<div id="SubscribeItemOptionAdd" class="subscribeOption subscribe selected">{{download}}</div>' +
     '</span>';
 
 // append the element after the real subscribe button
-if (realButton.nextSibling)
-{
+if (realButton.nextSibling) {
     realButton.parentNode.insertBefore(button, realButton.nextSibling);
-}
-else
-{
+} else {
     realButton.parentNode.appendChild(button);
 }
