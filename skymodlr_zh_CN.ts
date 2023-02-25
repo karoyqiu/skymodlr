@@ -4,17 +4,33 @@
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="downloader.cpp" line="77"/>
+        <location filename="downloader.cpp" line="21"/>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="downloader.cpp" line="38"/>
+        <source>Downloading...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="downloader.cpp" line="78"/>
+        <location filename="downloader.cpp" line="91"/>
         <source>Failed to get download url (%1).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="117"/>
+        <location filename="downloader.cpp" line="127"/>
+        <source>Installed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="downloader.cpp" line="132"/>
         <source>Failed to unzip.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="123"/>
+        <location filename="downloader.cpp" line="138"/>
         <source>Failed to download zip (%1).</source>
         <translation type="unfinished"></translation>
     </message>
@@ -32,17 +48,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="95"/>
+        <location filename="mainwindow.cpp" line="97"/>
         <source>Download/Subscribe to the right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="96"/>
+        <location filename="mainwindow.cpp" line="98"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="170"/>
+        <location filename="mainwindow.cpp" line="172"/>
         <source>Failed to find Skylines.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -9,21 +9,21 @@
 
 const id = /[0-9]{2,15}/.exec(document.URL);
 
-// WebChannel
-new QWebChannel(qt.webChannelTransport, (channel) => {
-    console.log('Web channel connected!', id);
-});
-
 const realButton = document.getElementById('SubscribeItemBtn');
 
 const button = document.createElement('a');
 button.setAttribute('id', realButton.id);
 button.setAttribute('class', realButton.className);
 button.setAttribute('href', `dl:${id}`);
-button.innerHTML = '<div class="subscribeIcon"></div>' +
-    '<span class="subscribeText">' +
-    '<div id="SubscribeItemOptionAdd" class="subscribeOption subscribe selected">{{download}}</div>' +
-    '</span>';
+
+const updateButtonText = (text) => {
+    button.innerHTML = '<div class="subscribeIcon"></div>' +
+        '<span class="subscribeText">' +
+        `<div id="SubscribeItemOptionAdd" class="subscribeOption subscribe selected">${text}</div>` +
+        '</span>';
+}
+
+updateButtonText('Download');
 
 // append the element after the real subscribe button
 if (realButton.nextSibling) {
@@ -31,3 +31,12 @@ if (realButton.nextSibling) {
 } else {
     realButton.parentNode.appendChild(button);
 }
+
+// WebChannel
+new QWebChannel(qt.webChannelTransport, (channel) => {
+    console.log('Web channel connected!', id);
+    window.dl = channel.objects.dl;
+    
+    updateButtonText(dl.buttonText);
+    dl.buttonTextChanged.connect(updateButtonText);
+});

@@ -18,9 +18,15 @@
 Downloader::Downloader(QObject *parent /*= nullptr*/)
     : QObject(parent)
     , net_(nullptr)
+    , buttonText_(tr("Download"))
 {
     net_ = new QNetworkAccessManager(this);
     net_->setProxy(QNetworkProxy::NoProxy);
+
+    connect(this, &Downloader::failed, this, [this]()
+    {
+        setButtonText(tr("Failed"));
+    });
 }
 
 
@@ -34,6 +40,8 @@ void Downloader::setInstallDirectory(const QString &value)
 void Downloader::download(const QString &id)
 {
     qDebug() << "Downloading" << id;
+    setButtonText(tr("Downloading..."));
+
     QUrlQuery query;
     query.addQueryItem(QS("item"), id);
     query.addQueryItem(QS("app"), QS("255710"));
@@ -45,6 +53,16 @@ void Downloader::download(const QString &id)
 
     auto *reply = net_->post(req, body);
     connect(reply, &QNetworkReply::finished, this, &Downloader::handleReply);
+}
+
+
+void Downloader::setButtonText(const QString &value)
+{
+    if (buttonText_ != value)
+    {
+        buttonText_ = value;
+        emit buttonTextChanged(value);
+    }
 }
 
 
@@ -62,6 +80,7 @@ void Downloader::handleReply()
         if (start == -1)
         {
             qCritical() << "Failed to get the download url." << s;
+            emit failed(tr("Failed to get download url (%1).").arg(s));
         }
         else
         {
@@ -110,6 +129,7 @@ void Downloader::handleZip()
         if (ok)
         {
             emit downloaded();
+            setButtonText(tr("Installed!"));
         }
         else
         {

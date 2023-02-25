@@ -21,6 +21,7 @@ class QNetworkAccessManager;
 class Downloader : public QObject
 {
     Q_OBJECT
+        Q_PROPERTY(QString buttonText READ buttonText NOTIFY buttonTextChanged)
 
 public:
     explicit Downloader(QObject *parent = nullptr);
@@ -28,11 +29,16 @@ public:
     void setInstallDirectory(const QString &value);
     void download(const QString &id);
 
+    QString buttonText() const { return buttonText_; }
+
 signals:
     void downloaded();
     void failed(const QString &error);
+    void buttonTextChanged(const QString &);
 
 private:
+    void setButtonText(const QString &value);
+
     void handleReply();
 
     void downloadZip(const QUrl &url);
@@ -41,4 +47,5 @@ private:
 private:
     QNetworkAccessManager *net_;
     QString modDir_;
+    QString buttonText_;
 };

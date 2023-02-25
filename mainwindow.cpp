@@ -44,8 +44,10 @@ MainWindow::MainWindow(QWidget *parent)
     loadScript(profile, QS(":/qtwebchannel/qwebchannel.js"), QWebEngineScript::DocumentCreation);
     loadScript(profile, QS(":/scripts/steamwd.user.js"));
 
-    auto *page = new QWebEnginePage(profile, ui->webView);
     auto *channel = new QWebChannel(this);
+    channel->registerObject(QS("dl"), downloader_);
+
+    auto *page = new QWebEnginePage(profile, ui->webView);
     page->setWebChannel(channel, QWebEngineScript::ApplicationWorld);
     ui->webView->setPage(page);
 
