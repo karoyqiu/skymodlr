@@ -31,6 +31,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Register download scheme
     downloader_ = new Downloader(this);
+    connect(downloader_, &Downloader::failed, this, [this](const QString &msg)
+    {
+        QMessageBox::critical(this, tr("Error"), msg);
+    });
+
     auto *dl = new DownloadSchemeHandler(this);
     connect(dl, &DownloadSchemeHandler::downloadRequested, downloader_, &Downloader::download);
     profile->installUrlSchemeHandler(QB("dl"), dl);

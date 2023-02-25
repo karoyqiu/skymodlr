@@ -33,6 +33,7 @@ void Downloader::setInstallDirectory(const QString &value)
 
 void Downloader::download(const QString &id)
 {
+    qDebug() << "Downloading" << id;
     QUrlQuery query;
     query.addQueryItem(QS("item"), id);
     query.addQueryItem(QS("app"), QS("255710"));
@@ -41,6 +42,7 @@ void Downloader::download(const QString &id)
     QNetworkRequest req(QS("http://steamworkshop.download/online/steamonline.php"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, QB("application/x-www-form-urlencoded"));
     req.setHeader(QNetworkRequest::UserAgentHeader, USER_AGENT);
+
     auto *reply = net_->post(req, body);
     connect(reply, &QNetworkReply::finished, this, &Downloader::handleReply);
 }
@@ -72,6 +74,7 @@ void Downloader::handleReply()
     else
     {
         qCritical() << "Failed to get download url." << status;
+        emit failed(tr("Failed to get download url (%1).").arg(status));
     }
 
     reply->deleteLater();
@@ -84,6 +87,7 @@ void Downloader::downloadZip(const QUrl &url)
     QNetworkRequest req(url);
     req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
     req.setHeader(QNetworkRequest::UserAgentHeader, USER_AGENT);
+
     auto *reply = net_->get(req);
     connect(reply, &QNetworkReply::finished, this, &Downloader::handleZip);
 }
@@ -110,12 +114,13 @@ void Downloader::handleZip()
         else
         {
             qCritical() << "Failed to unzip.";
-            emit failed();
+            emit failed(tr("Failed to unzip."));
         }
     }
     else
     {
         qCritical() << "Failed to download zip." << status;
+        emit failed(tr("Failed to download zip (%1).").arg(status));
     }
 
     reply->deleteLater();

@@ -30,7 +30,7 @@ public:
 
 signals:
     void downloaded();
-    void failed();
+    void failed(const QString &error);
 
 private:
     void handleReply();
