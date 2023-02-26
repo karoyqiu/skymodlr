@@ -46,7 +46,7 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS ${QT_LIBS} LinguistTools REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS ${QT_LIBS} LinguistTools REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR}Gui COMPONENTS Private REQUIRED)
 
-#configure_file(resource.rc.in resource.rc @ONLY)
+configure_file(resource.rc.in resource.rc @ONLY)
 
 set(TS_FILES skymodlr_zh_CN.ts)
 
@@ -56,10 +56,10 @@ set(PROJECT_SOURCES
     downloadschemehandler.cpp downloadschemehandler.h
     downloader.cpp downloader.h
     settingsdialog.cpp settingsdialog.h settingsdialog.ui
-    #"${CMAKE_CURRENT_BINARY_DIR}/resource.rc"
     resources.qrc
     icons.qrc
     ${TS_FILES}
+    "${CMAKE_CURRENT_BINARY_DIR}/resource.rc"
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
