@@ -12,8 +12,10 @@
  **************************************************************************************************/
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include "downloader.h"
 #include "downloadschemehandler.h"
+#include "settingsdialog.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -59,12 +61,16 @@ MainWindow::MainWindow(QWidget *parent)
     auto *toolBar = new QToolBar(this);
     auto *a = ui->webView->pageAction(QWebEnginePage::Back);
     toolBar->addAction(ui->webView->pageAction(QWebEnginePage::Back));
+    toolBar->addAction(ui->webView->pageAction(QWebEnginePage::Reload));
     ui->verticalLayout->insertWidget(0, toolBar);
 
     auto *progress = new QProgressBar(this);
     connect(ui->webView, &QWebEngineView::loadProgress, progress, &QProgressBar::setValue);
     toolBar->addSeparator();
     toolBar->addWidget(progress);
+
+    toolBar->addSeparator();
+    toolBar->addAction(QIcon::fromTheme(QS("open-menu")), tr("Settings..."), this, &MainWindow::showSettings);
 
     // Find out where Skylines is.
     QTimer::singleShot(0, this, &MainWindow::detectSkylines);
@@ -127,20 +133,32 @@ void MainWindow::loadSettings()
     QSettings settings;
     restoreGeometry(settings.value(QS("geo")).toByteArray());
 
-    // Load proxy settings
-    settings.beginGroup(QS("proxy"));
-    auto host = settings.value(QS("host")).toString();
-    auto port = settings.value(QS("port")).value<quint16>();
+    loadProxySettings();
+}
 
-    if (!host.isEmpty() && port != 0)
+
+void MainWindow::loadProxySettings()
+{
+    // Load proxy settings
+    QSettings settings;
+    settings.beginGroup(QS("proxy"));
+    auto enabled = settings.value(QS("enabled")).toBool();
+
+    if (enabled)
     {
-        auto type = static_cast<QNetworkProxy::ProxyType>(settings.value(QS("type")).toInt());
-        QNetworkProxy proxy(type, host, port);
-        QNetworkProxy::setApplicationProxy(proxy);
-    }
-    else
-    {
-        QNetworkProxyFactory::setUseSystemConfiguration(true);
+        auto host = settings.value(QS("host")).toString();
+        auto port = settings.value(QS("port")).value<quint16>();
+
+        if (!host.isEmpty() && port != 0)
+        {
+            auto type = static_cast<QNetworkProxy::ProxyType>(settings.value(QS("type")).toInt());
+            QNetworkProxy proxy(type, host, port);
+            QNetworkProxy::setApplicationProxy(proxy);
+        }
+        else
+        {
+            QNetworkProxyFactory::setUseSystemConfiguration(true);
+        }
     }
 }
 
@@ -154,32 +172,55 @@ void MainWindow::saveSettings() const
 
 void MainWindow::detectSkylines()
 {
-    QSettings reg(QS(R"(HKEY_CURRENT_USER\Software\Epic Games\EOS)"), QSettings::NativeFormat);
-    auto metaDir = reg.value(QS("ModSdkMetadataDir")).toString();
+    QSettings settings;
+    auto location = settings.value(QS("skylines")).toString();
 
-    if (!metaDir.isEmpty())
+    if (location.isEmpty())
     {
-        QDir dir(metaDir);
+        QSettings reg(QS(R"(HKEY_CURRENT_USER\Software\Epic Games\EOS)"), QSettings::NativeFormat);
+        auto metaDir = reg.value(QS("ModSdkMetadataDir")).toString();
 
-        for (const auto &entry : dir.entryList({ QS("*.item") }))
+        if (!metaDir.isEmpty())
         {
-            QFile file(dir.absoluteFilePath(entry));
+            QDir dir(metaDir);
 
-            if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+            for (const auto &entry : dir.entryList({ QS("*.item") }))
             {
-                auto doc = QJsonDocument::fromJson(file.readAll());
-                auto appName = doc[QL("MainGameAppName")].toString();
+                QFile file(dir.absoluteFilePath(entry));
 
-                if (appName == QS("bcbc03d8812a44c18f41cf7d5f849265"))
+                if (file.open(QIODevice::ReadOnly | QIODevice::Text))
                 {
-                    auto location = doc[QL("InstallLocation")].toString();
-                    qInfo() << "Skylines install location:" << location;
-                    downloader_->setInstallDirectory(location);
-                    return;
+                    auto doc = QJsonDocument::fromJson(file.readAll());
+                    auto appName = doc[QL("MainGameAppName")].toString();
+
+                    if (appName == QS("bcbc03d8812a44c18f41cf7d5f849265"))
+                    {
+                        location = QDir::toNativeSeparators(doc[QL("InstallLocation")].toString());
+                        qInfo() << "Skylines install location:" << location;
+                        settings.setValue(QS("skylines"), location);
+                        downloader_->setInstallDirectory(location);
+                        return;
+                    }
                 }
             }
         }
-    }
 
-    QMessageBox::warning(this, {}, tr("Failed to find Skylines."));
+        QMessageBox::warning(this, {}, tr("Failed to find Skylines."));
+    }
+    else
+    {
+        downloader_->setInstallDirectory(location);
+    }
+}
+
+
+void MainWindow::showSettings()
+{
+    SettingsDialog dialog(this);
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        loadProxySettings();
+        detectSkylines();
+    }
 }

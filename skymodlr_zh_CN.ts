@@ -50,23 +50,85 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="37"/>
+        <location filename="mainwindow.cpp" line="39"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="109"/>
+        <location filename="mainwindow.cpp" line="73"/>
+        <source>Settings...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="115"/>
         <source>Download/Subscribe to the right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="110"/>
+        <location filename="mainwindow.cpp" line="116"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="184"/>
+        <location filename="mainwindow.cpp" line="208"/>
         <source>Failed to find Skylines.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SettingsDialog</name>
+    <message>
+        <location filename="settingsdialog.ui" line="14"/>
+        <location filename="out/build/x64-Debug/skymodlr_autogen/include/ui_settingsdialog.h" line="144"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="22"/>
+        <location filename="out/build/x64-Debug/skymodlr_autogen/include/ui_settingsdialog.h" line="145"/>
+        <source>Skylines location:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="35"/>
+        <location filename="out/build/x64-Debug/skymodlr_autogen/include/ui_settingsdialog.h" line="146"/>
+        <source>Browse...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="44"/>
+        <location filename="out/build/x64-Debug/skymodlr_autogen/include/ui_settingsdialog.h" line="147"/>
+        <source>Use proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="53"/>
+        <location filename="out/build/x64-Debug/skymodlr_autogen/include/ui_settingsdialog.h" line="148"/>
+        <source>Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="64"/>
+        <location filename="out/build/x64-Debug/skymodlr_autogen/include/ui_settingsdialog.h" line="149"/>
+        <source>HTTP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="69"/>
+        <location filename="out/build/x64-Debug/skymodlr_autogen/include/ui_settingsdialog.h" line="150"/>
+        <source>SOCKS5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="77"/>
+        <location filename="out/build/x64-Debug/skymodlr_autogen/include/ui_settingsdialog.h" line="152"/>
+        <source>Host:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settingsdialog.ui" line="90"/>
+        <location filename="out/build/x64-Debug/skymodlr_autogen/include/ui_settingsdialog.h" line="153"/>
+        <source>Port:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

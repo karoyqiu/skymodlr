@@ -41,9 +41,11 @@ private:
 
 private:
     void loadSettings();
+    void loadProxySettings();
     void saveSettings() const;
 
     void detectSkylines();
+    void showSettings();
 
 private:
     Ui::MainWindow *ui;

@@ -55,8 +55,10 @@ set(PROJECT_SOURCES
     mainwindow.cpp mainwindow.h mainwindow.ui
     downloadschemehandler.cpp downloadschemehandler.h
     downloader.cpp downloader.h
+    settingsdialog.cpp settingsdialog.h settingsdialog.ui
     #"${CMAKE_CURRENT_BINARY_DIR}/resource.rc"
     resources.qrc
+    icons.qrc
     ${TS_FILES}
 )
 

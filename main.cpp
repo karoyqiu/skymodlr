@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     QApplication::setApplicationDisplayName(QApplication::translate("main", "Skylines Mod Downloader"));
 
     checkDarkMode(a);
-    //QIcon::setThemeName(QS("elementary"));
+    QIcon::setThemeName(QS("elementary"));
 
     // Register a custom scheme
     QWebEngineUrlScheme scheme(QB("dl"));
