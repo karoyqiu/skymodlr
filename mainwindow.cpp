@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     , downloader_(nullptr)
 {
     ui->setupUi(this);
+
     loadSettings();
 
     // Get the default profile
@@ -53,6 +54,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Load Skylines mods page
     ui->webView->load(QS("https://steamcommunity.com/workshop/browse/?appid=255710&requiredtags[]=Mod"));
+
+    // Add a tool bar
+    auto *toolBar = new QToolBar(this);
+    auto *a = ui->webView->pageAction(QWebEnginePage::Back);
+    toolBar->addAction(ui->webView->pageAction(QWebEnginePage::Back));
+    ui->verticalLayout->insertWidget(0, toolBar);
+
+    auto *progress = new QProgressBar(this);
+    connect(ui->webView, &QWebEngineView::loadProgress, progress, &QProgressBar::setValue);
+    toolBar->addSeparator();
+    toolBar->addWidget(progress);
 
     // Find out where Skylines is.
     QTimer::singleShot(0, this, &MainWindow::detectSkylines);

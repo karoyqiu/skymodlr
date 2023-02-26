@@ -4,7 +4,8 @@
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="downloader.h" line="34"/>
+        <location filename="downloader.cpp" line="25"/>
+        <location filename="downloader.cpp" line="73"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19,23 +20,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="87"/>
-        <location filename="downloader.cpp" line="97"/>
+        <location filename="downloader.cpp" line="102"/>
+        <location filename="downloader.cpp" line="112"/>
         <source>Failed to get download url (%1).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="133"/>
+        <location filename="downloader.cpp" line="69"/>
+        <location filename="downloader.cpp" line="148"/>
         <source>Installed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="138"/>
+        <location filename="downloader.cpp" line="153"/>
         <source>Failed to unzip.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="144"/>
+        <location filename="downloader.cpp" line="159"/>
         <source>Failed to download zip (%1).</source>
         <translation type="unfinished"></translation>
     </message>
@@ -48,22 +50,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="36"/>
+        <location filename="mainwindow.cpp" line="37"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="97"/>
+        <location filename="mainwindow.cpp" line="109"/>
         <source>Download/Subscribe to the right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="98"/>
+        <location filename="mainwindow.cpp" line="110"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="172"/>
+        <location filename="mainwindow.cpp" line="184"/>
         <source>Failed to find Skylines.</source>
         <translation type="unfinished"></translation>
     </message>

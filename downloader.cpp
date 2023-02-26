@@ -22,7 +22,7 @@ Downloader::Downloader(QObject *parent /*= nullptr*/)
     net_ = new QNetworkAccessManager(this);
     net_->setProxy(QNetworkProxy::NoProxy);
 
-    resetButtonText();
+    setButtonText(tr("Download"));
     connect(this, &Downloader::failed, this, [this]()
     {
         setButtonText(tr("Failed"));
@@ -57,6 +57,21 @@ void Downloader::download(const QString &id)
 
     auto *reply = net_->post(req, body);
     connect(reply, &QNetworkReply::finished, this, &Downloader::handleReply);
+}
+
+
+void Downloader::resetButtonText(const QString &id)
+{
+    QDir dir(modDir_);
+
+    if (dir.cd(id))
+    {
+        setButtonText(tr("Installed!"));
+    }
+    else
+    {
+        setButtonText(tr("Download"));
+    }
 }
 
 
