@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/scripts">
+        <file>steamwd.user.js</file>
+    </qresource>
+</RCC>
