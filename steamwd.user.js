@@ -3,6 +3,7 @@
 // @namespace      http://vova1234.com/blog/web/69.html
 // @description    Adds a button to the Steam Workshop pages that lets you head straight to the specific addon page at steamworkshop.download
 // @include        *steamcommunity.com/sharedfiles/filedetails/?id=*
+// @include        *steamcommunity.com/workshop/filedetails/?id=*
 // @version        0.0.1
 // @downloadURL    http://st.abcvg.info/swd/steamwd.user.js
 // ==/UserScript==
@@ -42,3 +43,14 @@ new QWebChannel(qt.webChannelTransport, (channel) => {
     updateButtonText(dl.buttonText);
     dl.buttonTextChanged.connect(updateButtonText);
 });
+
+
+const ass = document.getElementsByTagName('a');
+
+for (let i = 0; i < ass.length; i += 1) {
+    const a = ass.item(i);
+
+    if (a.target === '_blank') {
+        a.target = '_self';
+    }
+}

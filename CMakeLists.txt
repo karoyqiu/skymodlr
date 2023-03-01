@@ -53,7 +53,6 @@ set(TS_FILES skymodlr_zh_CN.ts)
 set(PROJECT_SOURCES
     main.cpp
     mainwindow.cpp mainwindow.h mainwindow.ui
-    downloadschemehandler.cpp downloadschemehandler.h
     downloader.cpp downloader.h
     settingsdialog.cpp settingsdialog.h settingsdialog.ui
     resources.qrc

@@ -48,6 +48,6 @@ private:
 
 private:
     QNetworkAccessManager *net_;
-    QString modDir_;
+    QString filesDir_;
     QString buttonText_;
 };

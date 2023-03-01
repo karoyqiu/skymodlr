@@ -33,7 +33,7 @@ Downloader::Downloader(QObject *parent /*= nullptr*/)
 void Downloader::setInstallDirectory(const QString &value)
 {
     QDir dir(value);
-    modDir_ = dir.absoluteFilePath(QS("Files/Mods"));
+    filesDir_ = dir.absoluteFilePath(QS("Files"));
 }
 
 
@@ -62,9 +62,8 @@ void Downloader::download(const QString &id)
 
 void Downloader::resetButtonText(const QString &id)
 {
-    QDir dir(modDir_);
-
-    if (dir.cd(id))
+    if (QFileInfo::exists(filesDir_ % QL("/Mods/") % id)
+        || QFileInfo::exists(filesDir_ % QL("/Scenarios/") % id))
     {
         setButtonText(tr("Installed!"));
     }
@@ -139,8 +138,19 @@ void Downloader::handleZip()
         buffer.setData(reply->readAll());
         buffer.open(QIODevice::ReadOnly);
 
+        QLatin1String subDir("Scenarios");
         QZipReader zip(&buffer);
-        auto ok = zip.extractAll(modDir_);
+
+        for (const auto &info : zip.fileInfoList())
+        {
+            if (info.isFile && info.filePath.endsWith(QL(".dll")))
+            {
+                subDir = QL("Mods");
+                break;
+            }
+        }
+
+        auto ok = zip.extractAll(filesDir_ % QL("/") % subDir);
 
         if (ok)
         {

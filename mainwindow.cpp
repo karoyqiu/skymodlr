@@ -14,7 +14,6 @@
 #include "ui_mainwindow.h"
 
 #include "downloader.h"
-#include "downloadschemehandler.h"
 #include "settingsdialog.h"
 
 
@@ -32,20 +31,16 @@ MainWindow::MainWindow(QWidget *parent)
     profile->setHttpUserAgent(USER_AGENT);
     profile->settings()->setAttribute(QWebEngineSettings::WebRTCPublicInterfacesOnly, true);
 
-    // Register download scheme
+    // Load user script
+    loadScript(profile, QS(":/qtwebchannel/qwebchannel.js"), QWebEngineScript::DocumentCreation);
+    loadScript(profile, QS(":/scripts/steamwd.user.js"));
+
+    // Bridge the downloader
     downloader_ = new Downloader(this);
     connect(downloader_, &Downloader::failed, this, [this](const QString &msg)
     {
         QMessageBox::critical(this, tr("Error"), msg);
     });
-
-    auto *dl = new DownloadSchemeHandler(this);
-    connect(dl, &DownloadSchemeHandler::downloadRequested, downloader_, &Downloader::download);
-    profile->installUrlSchemeHandler(QB("dl"), dl);
-
-    // Load user script
-    loadScript(profile, QS(":/qtwebchannel/qwebchannel.js"), QWebEngineScript::DocumentCreation);
-    loadScript(profile, QS(":/scripts/steamwd.user.js"));
 
     auto *channel = new QWebChannel(this);
     channel->registerObject(QS("dl"), downloader_);
