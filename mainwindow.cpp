@@ -57,6 +57,8 @@ MainWindow::MainWindow(QWidget *parent)
     auto *a = ui->webView->pageAction(QWebEnginePage::Back);
     toolBar->addAction(ui->webView->pageAction(QWebEnginePage::Back));
     toolBar->addAction(ui->webView->pageAction(QWebEnginePage::Reload));
+    auto *gotoAction = toolBar->addAction(QIcon::fromTheme(QS("go-jump")), tr("Go to..."), this, &MainWindow::goTo);
+    gotoAction->setShortcut(Qt::CTRL + Qt::Key_G);
     ui->verticalLayout->insertWidget(0, toolBar);
 
     auto *progress = new QProgressBar(this);
@@ -217,5 +219,16 @@ void MainWindow::showSettings()
     {
         loadProxySettings();
         detectSkylines();
+    }
+}
+
+
+void MainWindow::goTo()
+{
+    auto id = QInputDialog::getText(this, {}, tr("Input the mod ID:"));
+
+    if (!id.isEmpty())
+    {
+        ui->webView->load(QS("https://steamcommunity.com/sharedfiles/filedetails/?id=%1").arg(id));
     }
 }

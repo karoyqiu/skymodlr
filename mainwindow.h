@@ -46,6 +46,7 @@ private:
 
     void detectSkylines();
     void showSettings();
+    void goTo();
 
 private:
     Ui::MainWindow *ui;
