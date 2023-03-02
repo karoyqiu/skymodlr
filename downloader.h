@@ -30,7 +30,7 @@ public:
 
 public slots:
     void setInstallDirectory(const QString &value);
-    void download(const QString &id);
+    void download(const QStringList &ids);
     void resetButtonText(const QString &id);
 
 signals:
@@ -41,6 +41,7 @@ signals:
 private:
     void setButtonText(const QString &value);
 
+    void downloadNext();
     void handleReply();
 
     void downloadZip(const QUrl &url);
@@ -50,4 +51,5 @@ private:
     QNetworkAccessManager *net_;
     QString filesDir_;
     QString buttonText_;
+    QStringList pending_;
 };

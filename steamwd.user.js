@@ -38,7 +38,7 @@ new QWebChannel(qt.webChannelTransport, (channel) => {
     console.log('Web channel connected!', id);
     window.dl = channel.objects.dl;
     
-    button.onclick = () => { dl.download(id); }
+    button.onclick = () => { dl.download([id]); }
     dl.resetButtonText(id);
     updateButtonText(dl.buttonText);
     dl.buttonTextChanged.connect(updateButtonText);

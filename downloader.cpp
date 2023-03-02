@@ -26,7 +26,9 @@ Downloader::Downloader(QObject *parent /*= nullptr*/)
     connect(this, &Downloader::failed, this, [this]()
     {
         setButtonText(tr("Failed"));
+        downloadNext();
     });
+    connect(this, &Downloader::downloaded, this, &Downloader::downloadNext);
 }
 
 
@@ -37,26 +39,10 @@ void Downloader::setInstallDirectory(const QString &value)
 }
 
 
-void Downloader::download(const QString &id)
+void Downloader::download(const QStringList &ids)
 {
-    qDebug() << "Downloading" << id;
-    setButtonText(tr("Downloading..."));
-
-    QNetworkRequest req(QS("https://api.ggntw.com/steam.request"));
-    req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
-    req.setHeader(QNetworkRequest::ContentTypeHeader, QB("application/json"));
-    req.setHeader(QNetworkRequest::UserAgentHeader, USER_AGENT);
-    req.setRawHeader(QB("Origin"), QB("https://ggntw.com"));
-    req.setRawHeader(QB("Referer"), QB("https://ggntw.com/"));
-
-    QJsonObject obj{
-        { QS("url"), QString(QS("https://steamcommunity.com/sharedfiles/filedetails/?id=") % id) }
-    };
-    QJsonDocument doc(obj);
-    auto body = doc.toJson(QJsonDocument::Compact);
-
-    auto *reply = net_->post(req, body);
-    connect(reply, &QNetworkReply::finished, this, &Downloader::handleReply);
+    pending_.append(ids);
+    downloadNext();
 }
 
 
@@ -81,6 +67,36 @@ void Downloader::setButtonText(const QString &value)
         buttonText_ = value;
         emit buttonTextChanged(value);
     }
+}
+
+
+void Downloader::downloadNext()
+{
+    if (pending_.isEmpty())
+    {
+        return;
+    }
+
+    auto id = pending_.takeFirst();
+    qDebug() << "Downloading" << id;
+    setButtonText(tr("Downloading..."));
+
+    QNetworkRequest req(QS("https://api.ggntw.com/steam.request"));
+    req.setAttribute(QNetworkRequest::Http2AllowedAttribute, true);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, QB("application/json"));
+    req.setHeader(QNetworkRequest::UserAgentHeader, USER_AGENT);
+    req.setRawHeader(QB("Origin"), QB("https://ggntw.com"));
+    req.setRawHeader(QB("Referer"), QB("https://ggntw.com/"));
+
+    QJsonObject obj{
+        { QS("url"), QString(QS("https://steamcommunity.com/sharedfiles/filedetails/?id=") % id) }
+    };
+    QJsonDocument doc(obj);
+    auto body = doc.toJson(QJsonDocument::Compact);
+
+    auto *reply = net_->post(req, body);
+    connect(reply, &QNetworkReply::finished, this, &Downloader::handleReply);
+
 }
 
 

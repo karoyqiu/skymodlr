@@ -5,7 +5,7 @@
     <name>Downloader</name>
     <message>
         <location filename="downloader.cpp" line="25"/>
-        <location filename="downloader.cpp" line="72"/>
+        <location filename="downloader.cpp" line="58"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15,29 +15,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="43"/>
+        <location filename="downloader.cpp" line="82"/>
         <source>Downloading...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="101"/>
-        <location filename="downloader.cpp" line="111"/>
+        <location filename="downloader.cpp" line="117"/>
+        <location filename="downloader.cpp" line="127"/>
         <source>Failed to get download url (%1).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="68"/>
-        <location filename="downloader.cpp" line="158"/>
+        <location filename="downloader.cpp" line="54"/>
+        <location filename="downloader.cpp" line="174"/>
         <source>Installed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="163"/>
+        <location filename="downloader.cpp" line="179"/>
         <source>Failed to unzip.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="downloader.cpp" line="169"/>
+        <location filename="downloader.cpp" line="185"/>
         <source>Failed to download zip (%1).</source>
         <translation type="unfinished"></translation>
     </message>
@@ -60,27 +60,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="69"/>
+        <location filename="mainwindow.cpp" line="70"/>
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="111"/>
+        <location filename="mainwindow.cpp" line="112"/>
         <source>Download/Subscribe to the right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="112"/>
+        <location filename="mainwindow.cpp" line="113"/>
         <source>Download</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="204"/>
+        <location filename="mainwindow.cpp" line="205"/>
         <source>Failed to find Skylines.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="227"/>
+        <location filename="mainwindow.cpp" line="228"/>
         <source>Input the mod ID:</source>
         <translation type="unfinished"></translation>
     </message>
